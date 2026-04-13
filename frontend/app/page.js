@@ -21,7 +21,7 @@ export default function HomePage() {
 
   if (loading) {
     return (
-      <div className="loading-page" style={{ minHeight: '100vh' }}>
+      <div className="loading-page">
         <div className="loading-spinner"></div>
       </div>
     );
@@ -29,70 +29,89 @@ export default function HomePage() {
 
   return (
     <div className="auth-page">
-      <div style={{ textAlign: 'center', position: 'relative', zIndex: 1, maxWidth: '600px' }}>
+      <div style={{ textAlign: 'center', position: 'relative', zIndex: 1, maxWidth: '800px' }} className="animate-fade-in">
         <div className="auth-logo" style={{ 
-          width: '80px', height: '80px', fontSize: '2.2rem', 
-          margin: '0 auto 24px',
-          animation: 'float 3s ease-in-out infinite'
+          width: '80px', height: '80px', fontSize: '2.4rem', 
+          margin: '0 auto 32px',
+          fontWeight: '800',
+          color: 'white'
         }}>
-          📚
+          RL
         </div>
         <h1 style={{ 
           fontFamily: 'Outfit, sans-serif',
-          fontSize: '3rem', 
+          fontSize: '3.5rem', 
           fontWeight: 800, 
-          marginBottom: '16px',
-          background: 'linear-gradient(135deg, #F1F1F6 0%, #818CF8 100%)',
+          marginBottom: '20px',
+          background: 'linear-gradient(135deg, var(--text-primary) 0%, var(--primary) 100%)',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
           backgroundClip: 'text',
+          letterSpacing: '-0.04em'
         }}>
           RPLibrary
         </h1>
         <p style={{ 
-          fontSize: '1.15rem', 
+          fontSize: '1.25rem', 
           color: 'var(--text-secondary)', 
-          marginBottom: '40px',
-          lineHeight: 1.7
+          marginBottom: '48px',
+          lineHeight: 1.6,
+          fontWeight: '400'
         }}>
-          Sistem Manajemen Perpustakaan Digital
+          Transformasi literasi digital di ujung jari Anda.
           <br />
-          <span style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>
-            Lab RPL — Institut Teknologi Sepuluh Nopember
+          <span style={{ color: 'var(--text-muted)', fontSize: '1rem' }}>
+            Lab Rekayasa Perangkat Lunak — ITS Surabaya
           </span>
         </p>
-        <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <Link href="/login" className="btn btn-primary btn-lg" style={{ minWidth: '160px' }}>
-            🔐 Masuk
+
+        <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', flexWrap: 'wrap' }}>
+          <Link href="/login" className="btn btn-primary btn-lg" style={{ minWidth: '180px' }}>
+            Masuk Portal
           </Link>
-          <Link href="/catalog" className="btn btn-secondary btn-lg" style={{ minWidth: '160px' }}>
-            📖 Lihat Katalog
+          <Link href="/catalog" className="btn btn-secondary btn-lg" style={{ minWidth: '180px' }}>
+            Eksplorasi Katalog
           </Link>
         </div>
-        <div style={{ 
-          marginTop: '60px', 
+
+        <div className="stagger-children" style={{ 
+          marginTop: '80px', 
           display: 'grid', 
-          gridTemplateColumns: 'repeat(3, 1fr)', 
-          gap: '20px',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
+          gap: '24px',
         }}>
           {[
-            { icon: '🔒', title: 'Autentikasi Aman', desc: 'JWT & bcrypt' },
-            { icon: '📊', title: 'Dashboard Admin', desc: 'CRUD Lengkap' },
-            { icon: '🔄', title: 'Sistem Peminjaman', desc: 'Otomatis & Realtime' },
+            { 
+              icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>, 
+              title: 'Keamanan Terjamin', 
+              desc: 'Enkripsi data standar industri' 
+            },
+            { 
+              icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>, 
+              title: 'Dashboard Cerdas', 
+              desc: 'Manajemen koleksi intuitif' 
+            },
+            { 
+              icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>, 
+              title: 'Sirkulasi Realtime', 
+              desc: 'Peminjaman tanpa hambatan' 
+            },
           ].map((feature, i) => (
-            <div key={i} className="card-glass" style={{ 
-              padding: '20px', 
+            <div key={i} className="card" style={{ 
+              padding: '32px 24px', 
               textAlign: 'center',
-              animation: `fadeInUp 0.5s ease forwards ${(i + 1) * 0.15}s`,
-              opacity: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '12px'
             }}>
-              <div style={{ fontSize: '1.8rem', marginBottom: '8px' }}>{feature.icon}</div>
-              <div style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '4px' }}>
+              <div style={{ color: 'var(--primary)', marginBottom: '8px' }}>{feature.icon}</div>
+              <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)' }}>
                 {feature.title}
-              </div>
-              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+              </h3>
+              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
                 {feature.desc}
-              </div>
+              </p>
             </div>
           ))}
         </div>
@@ -100,3 +119,4 @@ export default function HomePage() {
     </div>
   );
 }
+

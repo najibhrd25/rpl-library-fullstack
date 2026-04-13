@@ -29,15 +29,16 @@ export default function LoginPage() {
     try {
       if (isLogin) {
         await login(formData.email, formData.password);
-        toast.success('Login berhasil! Selamat datang 🎉');
+        toast.success('Selamat datang kembali!');
       } else {
         await register(formData.name, formData.email, formData.password);
-        toast.success('Registrasi berhasil! Silakan login.');
+        toast.success('Akun berhasil dibuat. Silakan masuk.');
         setIsLogin(true);
         setFormData({ name: '', email: '', password: '' });
       }
     } catch (err) {
-      toast.error(err.message || 'Terjadi kesalahan');
+      console.error('[Login Error]', err);
+      toast.error(err.message || 'Gagal masuk. Silakan periksa kredensial Anda.');
     } finally {
       setSubmitting(false);
     }
@@ -49,7 +50,7 @@ export default function LoginPage() {
 
   if (loading) {
     return (
-      <div className="loading-page" style={{ minHeight: '100vh' }}>
+      <div className="loading-page">
         <div className="loading-spinner"></div>
       </div>
     );
@@ -58,25 +59,27 @@ export default function LoginPage() {
   return (
     <div className="auth-page">
       <div className="auth-container">
-        <div className="auth-card">
+        <div className="auth-card animate-fade-in">
           <div className="auth-header">
-            <div className="auth-logo">📚</div>
-            <h1 className="auth-title">{isLogin ? 'Selamat Datang!' : 'Buat Akun Baru'}</h1>
+            <div className="auth-logo">
+              <span style={{ color: 'white', fontWeight: '800' }}>RL</span>
+            </div>
+            <h1 className="auth-title">{isLogin ? 'Selamat Datang' : 'Daftar Akun'}</h1>
             <p className="auth-subtitle">
-              {isLogin ? 'Masuk ke akun RPLibrary Anda' : 'Daftar sebagai member perpustakaan'}
+              {isLogin ? 'Masuk ke portal RPLibrary' : 'Mulai perjalanan literasi Anda'}
             </p>
           </div>
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="stagger-children">
             {!isLogin && (
-              <div className="form-group" style={{ animation: 'fadeIn 0.3s ease' }}>
+              <div className="form-group">
                 <label className="form-label" htmlFor="name">Nama Lengkap</label>
                 <input
                   id="name"
                   type="text"
                   name="name"
                   className="form-input"
-                  placeholder="Masukkan nama lengkap"
+                  placeholder="Masukkan nama Anda"
                   value={formData.name}
                   onChange={handleChange}
                   required={!isLogin}
@@ -91,7 +94,7 @@ export default function LoginPage() {
                 type="email"
                 name="email"
                 className="form-input"
-                placeholder="contoh@mail.com"
+                placeholder="nama@email.com"
                 value={formData.email}
                 onChange={handleChange}
                 required
@@ -105,7 +108,7 @@ export default function LoginPage() {
                 type="password"
                 name="password"
                 className="form-input"
-                placeholder="Minimal 6 karakter"
+                placeholder="Min. 6 karakter"
                 value={formData.password}
                 onChange={handleChange}
                 required
@@ -117,26 +120,29 @@ export default function LoginPage() {
               type="submit"
               className="btn btn-primary btn-lg w-full"
               disabled={submitting}
-              style={{ marginTop: '8px' }}
+              style={{ marginTop: '12px' }}
             >
               {submitting ? (
-                <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <div className="loading-spinner" style={{ width: '18px', height: '18px', borderWidth: '2px' }}></div>
-                  {isLogin ? 'Memproses...' : 'Mendaftar...'}
+                <span className="flex items-center gap-sm">
+                  <div className="loading-spinner" style={{ width: '18px', height: '18px', borderWidth: '2px', borderTopColor: 'white' }}></div>
+                  Memproses...
                 </span>
               ) : (
-                isLogin ? '🔐 Masuk' : '📝 Daftar'
+                isLogin ? 'Masuk Sekarang' : 'Daftar Akun'
               )}
             </button>
           </form>
 
           <div className="auth-toggle">
-            {isLogin ? 'Belum punya akun?' : 'Sudah punya akun?'}
-            <button onClick={() => {
-              setIsLogin(!isLogin);
-              setFormData({ name: '', email: '', password: '' });
-            }}>
-              {isLogin ? 'Daftar Sekarang' : 'Masuk'}
+            <span>{isLogin ? 'Belum punya akun?' : 'Sudah punya akun?'}</span>
+            <button 
+              type="button"
+              onClick={() => {
+                setIsLogin(!isLogin);
+                setFormData({ name: '', email: '', password: '' });
+              }}
+            >
+              {isLogin ? 'Buat Akun' : 'Masuk'}
             </button>
           </div>
         </div>
@@ -144,3 +150,4 @@ export default function LoginPage() {
     </div>
   );
 }
+

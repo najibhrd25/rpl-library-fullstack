@@ -26,11 +26,11 @@ export default function CatalogPage() {
       const data = await ApiService.getBooks(params);
       setBooks(data.data.books);
     } catch (err) {
-      toast.error('Gagal memuat buku');
+      toast.error('Gagal memuat daftar buku');
     } finally {
       setLoading(false);
     }
-  }, [search, categoryFilter]);
+  }, [search, categoryFilter, toast]);
 
   const fetchCategories = useCallback(async () => {
     try {
@@ -55,17 +55,17 @@ export default function CatalogPage() {
 
   const handleBorrow = async (bookId) => {
     if (!user) {
-      toast.warning('Silakan login terlebih dahulu untuk meminjam buku');
+      toast.warning('Silakan masuk terlebih dahulu untuk meminjam buku');
       return;
     }
     if (user.role === 'ADMIN') {
-      toast.info('Admin tidak bisa meminjam buku. Gunakan akun MEMBER.');
+      toast.info('Admin tidak diperbolehkan meminjam buku. Gunakan akun Member.');
       return;
     }
     setBorrowing(true);
     try {
       await ApiService.borrowBook(bookId);
-      toast.success('Berhasil meminjam buku! 📖');
+      toast.success('Peminjaman berhasil diproses. Selamat membaca!');
       setSelectedBook(null);
       fetchBooks();
     } catch (err) {
@@ -77,18 +77,20 @@ export default function CatalogPage() {
 
   return (
     <AppLayout>
-      <div className="page-header">
-        <h1 className="page-title">📚 Katalog Buku</h1>
-        <p className="page-subtitle">Jelajahi koleksi perpustakaan RPL</p>
+      <div className="page-header animate-fade-in">
+        <h1 className="page-title">Eksplorasi Katalog</h1>
+        <p className="page-subtitle">Temukan koleksi literasi pilihan untuk pengembangan diri Anda</p>
       </div>
 
-      <div className="catalog-controls">
+      <div className="catalog-controls animate-fade-in" style={{ animationDelay: '0.1s' }}>
         <div className="search-wrapper">
-          <span className="search-icon">🔍</span>
+          <div className="search-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          </div>
           <input
             type="text"
             className="search-input"
-            placeholder="Cari judul buku..."
+            placeholder="Ketik judul buku yang ingin dicari..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -106,27 +108,26 @@ export default function CatalogPage() {
       </div>
 
       {loading ? (
-        <div className="books-grid stagger-children">
-          {[1, 2, 3, 4, 5, 6].map((i) => (
+        <div className="books-grid">
+          {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
             <div key={i} className="book-card">
-              <div className="skeleton" style={{ height: '200px' }}></div>
-              <div style={{ padding: '16px' }}>
-                <div className="skeleton" style={{ height: '12px', width: '60%', marginBottom: '8px' }}></div>
-                <div className="skeleton" style={{ height: '16px', width: '80%', marginBottom: '6px' }}></div>
+              <div className="skeleton" style={{ height: '220px' }}></div>
+              <div style={{ padding: '20px' }}>
+                <div className="skeleton" style={{ height: '10px', width: '30%', marginBottom: '12px' }}></div>
+                <div className="skeleton" style={{ height: '18px', width: '85%', marginBottom: '8px' }}></div>
                 <div className="skeleton" style={{ height: '12px', width: '50%' }}></div>
               </div>
             </div>
           ))}
         </div>
       ) : books.length === 0 ? (
-        <div className="empty-state">
-          <div className="empty-icon">📖</div>
-          <div className="empty-title">Belum ada buku</div>
-          <div className="empty-description">
+        <div className="empty-state animate-fade-in">
+          <div className="empty-title">Katalog Belum Tersedia</div>
+          <p className="empty-description">
             {search || categoryFilter
-              ? 'Tidak ditemukan buku yang sesuai dengan filter Anda.'
-              : 'Koleksi buku masih kosong. Tunggu admin menambahkan buku baru!'}
-          </div>
+              ? 'Tidak ada buku yang sesuai dengan pencarian atau filter Anda.'
+              : 'Belum ada koleksi buku yang ditambahkan ke sistem ini.'}
+          </p>
         </div>
       ) : (
         <div className="books-grid stagger-children">
@@ -140,10 +141,12 @@ export default function CatalogPage() {
                 {book.coverImage ? (
                   <img src={book.coverImage} alt={book.title} />
                 ) : (
-                  <span className="no-cover">📖</span>
+                  <div className="no-cover">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                  </div>
                 )}
                 <span className={`book-stock-badge ${book.stock > 0 ? 'in-stock' : 'out-of-stock'}`}>
-                  {book.stock > 0 ? `Stok: ${book.stock}` : 'Habis'}
+                  {book.stock > 0 ? `Tersedia: ${book.stock}` : 'Stok Habis'}
                 </span>
               </div>
               <div className="book-info">
@@ -151,9 +154,9 @@ export default function CatalogPage() {
                   <span className="book-category-tag">{book.category.name}</span>
                 )}
                 <h3 className="book-title">{book.title}</h3>
-                <p className="book-author">oleh {book.author}</p>
+                <p className="book-author">Penulis: {book.author}</p>
                 <div className="book-footer">
-                  <span className="book-stock-text">{book.stock} tersedia</span>
+                  <span className="book-stock-text">{book.stock} Unit</span>
                   {user && user.role === 'MEMBER' && book.stock > 0 && (
                     <button
                       className="btn btn-primary btn-sm"
@@ -176,34 +179,33 @@ export default function CatalogPage() {
       <Modal
         isOpen={!!selectedBook}
         onClose={() => setSelectedBook(null)}
-        title={selectedBook?.title || ''}
+        title={selectedBook?.title || 'Detail Buku'}
         footer={
-          user && user.role === 'MEMBER' && selectedBook?.stock > 0 ? (
-            <>
-              <button className="btn btn-secondary" onClick={() => setSelectedBook(null)}>Tutup</button>
+          <div className="flex gap-md">
+            <button className="btn btn-secondary" onClick={() => setSelectedBook(null)}>Tutup</button>
+            {user && user.role === 'MEMBER' && selectedBook?.stock > 0 && (
               <button
                 className="btn btn-primary"
                 onClick={() => handleBorrow(selectedBook.id)}
                 disabled={borrowing}
               >
-                {borrowing ? 'Memproses...' : '📖 Pinjam Buku Ini'}
+                {borrowing ? 'Sedang Memproses...' : 'Pinjam Buku'}
               </button>
-            </>
-          ) : (
-            <button className="btn btn-secondary" onClick={() => setSelectedBook(null)}>Tutup</button>
-          )
+            )}
+          </div>
         }
       >
         {selectedBook && (
-          <div>
+          <div className="animate-fade-in">
             {selectedBook.coverImage && (
               <div style={{
                 width: '100%',
-                height: '240px',
-                borderRadius: 'var(--radius-md)',
+                height: '280px',
+                borderRadius: 'var(--radius-lg)',
                 overflow: 'hidden',
-                marginBottom: '20px',
+                marginBottom: '24px',
                 background: 'var(--bg-tertiary)',
+                boxShadow: 'var(--shadow-md)'
               }}>
                 <img
                   src={selectedBook.coverImage}
@@ -212,22 +214,32 @@ export default function CatalogPage() {
                 />
               </div>
             )}
-            <div style={{ display: 'flex', gap: '8px', marginBottom: '12px', flexWrap: 'wrap' }}>
+            <div className="flex gap-sm items-center mb-md">
               {selectedBook.category && (
-                <span className="book-category-tag">{selectedBook.category.name}</span>
+                <span className="book-category-tag" style={{ marginBottom: 0 }}>{selectedBook.category.name}</span>
               )}
               <span className={`book-stock-badge ${selectedBook.stock > 0 ? 'in-stock' : 'out-of-stock'}`}
                 style={{ position: 'static' }}>
-                {selectedBook.stock > 0 ? `Stok: ${selectedBook.stock}` : 'Stok Habis'}
+                {selectedBook.stock > 0 ? `${selectedBook.stock} Tersedia` : 'Stok Habis'}
               </span>
             </div>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '8px' }}>
-              <strong style={{ color: 'var(--text-secondary)' }}>Penulis:</strong> {selectedBook.author}
-            </p>
+            
+            <div className="mb-md">
+              <h4 style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                Informasi Penulis
+              </h4>
+              <p style={{ color: 'var(--text-primary)', fontWeight: '600' }}>{selectedBook.author}</p>
+            </div>
+
             {selectedBook.description && (
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.6 }}>
-                {selectedBook.description}
-              </p>
+              <div>
+                <h4 style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  Sinopsis Buku
+                </h4>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: 1.7 }}>
+                  {selectedBook.description}
+                </p>
+              </div>
             )}
           </div>
         )}
@@ -235,3 +247,4 @@ export default function CatalogPage() {
     </AppLayout>
   );
 }
+

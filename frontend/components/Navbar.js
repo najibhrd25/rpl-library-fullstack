@@ -18,16 +18,16 @@ export default function Navbar({ onToggleSidebar }) {
   };
 
   return (
-    <nav className="navbar">
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+    <nav className="navbar animate-fade-in">
+      <div className="flex items-center gap-md">
         {user && (
-          <button className="hamburger-btn" onClick={onToggleSidebar}>
-            ☰
+          <button className="hamburger-btn" onClick={onToggleSidebar} aria-label="Toggle Menu">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
           </button>
         )}
         <Link href={user ? (user.role === 'ADMIN' ? '/dashboard' : '/catalog') : '/'} className="navbar-brand">
-          <span className="logo-icon">📚</span>
-          RPLibrary
+          <div className="logo-icon">RL</div>
+          <span>RPLibrary</span>
         </Link>
       </div>
 
@@ -48,15 +48,16 @@ export default function Navbar({ onToggleSidebar }) {
               </span>
             </Link>
             <button className="btn-logout" onClick={handleLogout}>
-              Logout
+              Keluar
             </button>
           </>
         ) : (
           <Link href="/login" className="btn btn-primary btn-sm">
-            Login
+            Masuk
           </Link>
         )}
       </div>
     </nav>
   );
 }
+
