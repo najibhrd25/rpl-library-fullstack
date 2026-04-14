@@ -1578,3 +1578,481 @@ input, select, textarea {
 .mb-lg { margin-bottom: 24px; }
 .w-full { width: 100%; }
 .hidden { display: none; }
+
+/* ============================================
+   NEW SPLIT-SCREEN AUTH STYLES
+   ============================================ */
+.split-auth-container {
+  display: flex;
+  min-height: 100vh;
+  background: var(--bg-primary);
+}
+
+.auth-brand-side {
+  flex: 1.2;
+  background: var(--primary-dark);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 60px;
+  color: white;
+}
+
+@media (max-width: 900px) {
+  .auth-brand-side {
+    display: none;
+  }
+}
+
+.brand-pattern {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 32px 32px;
+  opacity: 0.5;
+  z-index: 1;
+}
+
+.brand-content {
+  position: relative;
+  z-index: 2;
+  max-width: 500px;
+}
+
+.brand-logo {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 40px;
+  letter-spacing: -0.05em;
+}
+
+.brand-heading {
+  font-size: 3.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 24px;
+  letter-spacing: -0.03em;
+  color: white;
+}
+
+.brand-subtext {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+.auth-form-side {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  background: var(--bg-primary);
+}
+
+.auth-form-wrapper {
+  width: 100%;
+  max-width: 400px;
+}
+
+.auth-header-minimal {
+  margin-bottom: 32px;
+}
+
+.auth-header-minimal h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+}
+
+.auth-header-minimal p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.auth-form-core {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group-clean {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group-clean label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.form-group-clean input {
+  padding: 14px 16px;
+  background: var(--bg-tertiary);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  transition: all var(--transition-fast);
+}
+
+.form-group-clean input:focus {
+  background: var(--bg-primary);
+  border-color: var(--border-active);
+  box-shadow: 0 0 0 4px var(--primary-soft);
+}
+
+.btn-primary-clean {
+  background: var(--text-primary);
+  color: white;
+  padding: 14px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 1rem;
+  margin-top: 8px;
+  transition: all var(--transition-fast);
+}
+
+.btn-primary-clean:hover {
+  background: #000000;
+  transform: translateY(-1px);
+}
+
+.auth-footer-clean {
+  margin-top: 32px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.auth-footer-clean button {
+  background: none;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-left: 6px;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  transition: text-decoration-color var(--transition-fast);
+}
+
+.auth-footer-clean button:hover {
+  text-decoration-color: var(--text-primary);
+}
+
+/* ============================================
+   ADMIN LAYOUT (B2B Startup Vibe)
+   ============================================ */
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #FAFAFA;
+}
+
+.admin-sidebar {
+  width: 250px;
+  background: white;
+  border-right: 1px solid #E5E7EB;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 50;
+}
+
+.admin-sidebar-header {
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid #F3F4F6;
+}
+
+.admin-sidebar-header .admin-logo {
+  font-weight: 800;
+  font-size: 1.2rem;
+  background: black;
+  color: white;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+}
+
+.admin-sidebar-header .admin-brand {
+  font-weight: 600;
+  color: #111827;
+  font-size: 0.95rem;
+}
+
+.admin-sidebar-content {
+  flex: 1;
+  padding: 24px 16px;
+  overflow-y: auto;
+}
+
+.admin-nav-group {
+  margin-bottom: 24px;
+}
+
+.admin-nav-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #9CA3AF;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+  padding-left: 8px;
+}
+
+.admin-nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.admin-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  color: #4B5563;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+
+.admin-nav-link:hover {
+  background: #F3F4F6;
+  color: #111827;
+}
+
+.admin-nav-link.active {
+  background: #EFF6FF;
+  color: #2563EB;
+}
+
+.admin-nav-link .icon, .student-nav-link .icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-sidebar-footer {
+  padding: 16px;
+  border-top: 1px solid #F3F4F6;
+}
+
+.admin-main-content {
+  flex: 1;
+  margin-left: 250px;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-topbar {
+  height: 64px;
+  background: white;
+  border-bottom: 1px solid #E5E7EB;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+
+.admin-topbar-breadcrumb {
+  font-size: 0.85rem;
+  color: #6B7280;
+  font-weight: 500;
+}
+
+.admin-topbar-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-avatar {
+  width: 32px;
+  height: 32px;
+  background: #E0E7FF;
+  color: #4338CA;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.admin-role-badge {
+  background: #F3F4F6;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.admin-page-container {
+  padding: 32px;
+  max-width: 1200px;
+  width: 100%;
+}
+
+
+/* ============================================
+   STUDENT LAYOUT (Discovery / Modern Web)
+   ============================================ */
+.student-layout {
+  min-height: 100vh;
+  background: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.student-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid #F3F4F6;
+}
+
+.student-navbar-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.student-nav-left {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.student-brand {
+  font-weight: 800;
+  font-size: 1.4rem;
+  color: #111827;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.student-brand-text {
+  font-weight: 400;
+  color: #6B7280;
+  font-size: 1rem;
+}
+
+.student-nav-links {
+  display: flex;
+  gap: 24px;
+}
+
+.student-nav-link {
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #6B7280;
+  transition: color 0.2s;
+  position: relative;
+}
+
+.student-nav-link:hover {
+  color: #111827;
+}
+
+.student-nav-link.active {
+  color: #111827;
+}
+
+.student-nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -24px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #111827;
+}
+
+.student-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.student-user-pill {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #F9FAFB;
+  padding: 4px 4px 4px 16px;
+  border-radius: 30px;
+  border: 1px solid #F3F4F6;
+}
+
+.student-user-name {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.student-user-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #111827;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.student-logout-btn {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #EF4444;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.student-logout-btn:hover {
+  text-decoration: underline;
+}
+
+.student-main-content {
+  flex: 1;
+  padding: 40px 24px;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}

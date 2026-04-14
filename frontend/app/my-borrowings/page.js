@@ -5,7 +5,7 @@ import { useAuth } from '@/lib/AuthContext';
 import { useToast } from '@/lib/ToastContext';
 import { useRouter } from 'next/navigation';
 import ApiService from '@/lib/api';
-import AppLayout from '@/components/AppLayout';
+import StudentLayout from '@/components/StudentLayout';
 
 export default function MyBorrowingsPage() {
   const { user, loading: authLoading } = useAuth();
@@ -45,13 +45,13 @@ export default function MyBorrowingsPage() {
   });
 
   if (authLoading || !user) {
-    return <AppLayout><div className="loading-page"><div className="loading-spinner"></div></div></AppLayout>;
+    return <StudentLayout><div className="loading-page"><div className="loading-spinner"></div></div></StudentLayout>;
   }
 
   return (
-    <AppLayout>
+    <StudentLayout>
       <div className="page-header">
-        <h1 className="page-title">📋 Peminjaman Saya</h1>
+        <h1 className="page-title">Riwayat Peminjaman</h1>
         <p className="page-subtitle">Riwayat peminjaman buku Anda di perpustakaan RPL</p>
       </div>
 
@@ -131,6 +131,6 @@ export default function MyBorrowingsPage() {
           ))}
         </div>
       )}
-    </AppLayout>
+    </StudentLayout>
   );
 }

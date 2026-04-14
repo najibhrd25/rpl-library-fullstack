@@ -5,7 +5,7 @@ import { useAuth } from '@/lib/AuthContext';
 import { useToast } from '@/lib/ToastContext';
 import { useRouter } from 'next/navigation';
 import ApiService from '@/lib/api';
-import AppLayout from '@/components/AppLayout';
+import AdminLayout from '@/components/AdminLayout';
 import Modal from '@/components/Modal';
 
 export default function BooksManagementPage() {
@@ -134,14 +134,14 @@ export default function BooksManagementPage() {
   };
 
   if (authLoading || !user) {
-    return <AppLayout><div className="loading-page"><div className="loading-spinner"></div></div></AppLayout>;
+    return <AdminLayout><div className="loading-page"><div className="loading-spinner"></div></div></AdminLayout>;
   }
 
   return (
-    <AppLayout>
+    <AdminLayout>
       <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <h1 className="page-title">📖 Kelola Buku</h1>
+          <h1 className="page-title">Inventaris Buku</h1>
           <p className="page-subtitle">Tambah, edit, atau hapus koleksi buku perpustakaan</p>
         </div>
         <button className="btn btn-primary" onClick={openCreateModal}>
@@ -330,6 +330,6 @@ export default function BooksManagementPage() {
           Tindakan ini tidak dapat dibatalkan.
         </p>
       </Modal>
-    </AppLayout>
+    </AdminLayout>
   );
 }

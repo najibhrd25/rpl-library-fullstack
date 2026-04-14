@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import ApiService from '@/lib/api';
 import { useAuth } from '@/lib/AuthContext';
 import { useToast } from '@/lib/ToastContext';
-import AppLayout from '@/components/AppLayout';
+import StudentLayout from '@/components/StudentLayout';
 import Modal from '@/components/Modal';
 
 export default function CatalogPage() {
@@ -76,7 +76,7 @@ export default function CatalogPage() {
   };
 
   return (
-    <AppLayout>
+    <StudentLayout>
       <div className="page-header animate-fade-in">
         <h1 className="page-title">Eksplorasi Katalog</h1>
         <p className="page-subtitle">Temukan koleksi literasi pilihan untuk pengembangan diri Anda</p>
@@ -244,7 +244,7 @@ export default function CatalogPage() {
           </div>
         )}
       </Modal>
-    </AppLayout>
+    </StudentLayout>
   );
 }
 

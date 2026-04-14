@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/lib/AuthContext';
 import { useRouter } from 'next/navigation';
 import ApiService from '@/lib/api';
-import AppLayout from '@/components/AppLayout';
+import AdminLayout from '@/components/AdminLayout';
 
 export default function DashboardPage() {
   const { user, loading } = useAuth();
@@ -58,20 +58,20 @@ export default function DashboardPage() {
 
   if (loading || !user) {
     return (
-      <AppLayout>
+      <AdminLayout>
         <div className="loading-page">
           <div className="loading-spinner"></div>
           <div className="loading-text">Menyiapkan Dashboard...</div>
         </div>
-      </AppLayout>
+      </AdminLayout>
     );
   }
 
   return (
-    <AppLayout>
+    <AdminLayout>
       <div className="page-header animate-fade-in">
         <h1 className="page-title">Ringkasan Sistem</h1>
-        <p className="page-subtitle">Selamat datang kembali, {user.name}. Berikut adalah statistik perpustakaan saat ini.</p>
+        <p className="page-subtitle">Selamat datang kembali. Berikut adalah statistik perpustakaan saat ini.</p>
       </div>
 
       {loadingStats ? (
@@ -177,7 +177,8 @@ export default function DashboardPage() {
           </div>
         )}
       </div>
-    </AppLayout>
+    </AdminLayout>
   );
 }
+
 

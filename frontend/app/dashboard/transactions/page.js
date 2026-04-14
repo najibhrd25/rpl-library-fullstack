@@ -5,7 +5,7 @@ import { useAuth } from '@/lib/AuthContext';
 import { useToast } from '@/lib/ToastContext';
 import { useRouter } from 'next/navigation';
 import ApiService from '@/lib/api';
-import AppLayout from '@/components/AppLayout';
+import AdminLayout from '@/components/AdminLayout';
 import Modal from '@/components/Modal';
 
 export default function TransactionsManagementPage() {
@@ -65,13 +65,13 @@ export default function TransactionsManagementPage() {
   });
 
   if (authLoading || !user) {
-    return <AppLayout><div className="loading-page"><div className="loading-spinner"></div></div></AppLayout>;
+    return <AdminLayout><div className="loading-page"><div className="loading-spinner"></div></div></AdminLayout>;
   }
 
   return (
-    <AppLayout>
+    <AdminLayout>
       <div className="page-header">
-        <h1 className="page-title">🔄 Kelola Transaksi</h1>
+        <h1 className="page-title">Sirkulasi Data</h1>
         <p className="page-subtitle">Lihat semua peminjaman dan konfirmasi pengembalian buku</p>
       </div>
 
@@ -219,6 +219,6 @@ export default function TransactionsManagementPage() {
           Stok buku akan otomatis bertambah 1 setelah dikonfirmasi.
         </p>
       </Modal>
-    </AppLayout>
+    </AdminLayout>
   );
 }

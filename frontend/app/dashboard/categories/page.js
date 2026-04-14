@@ -5,7 +5,7 @@ import { useAuth } from '@/lib/AuthContext';
 import { useToast } from '@/lib/ToastContext';
 import { useRouter } from 'next/navigation';
 import ApiService from '@/lib/api';
-import AppLayout from '@/components/AppLayout';
+import AdminLayout from '@/components/AdminLayout';
 import Modal from '@/components/Modal';
 
 export default function CategoriesManagementPage() {
@@ -95,14 +95,14 @@ export default function CategoriesManagementPage() {
   };
 
   if (authLoading || !user) {
-    return <AppLayout><div className="loading-page"><div className="loading-spinner"></div></div></AppLayout>;
+    return <AdminLayout><div className="loading-page"><div className="loading-spinner"></div></div></AdminLayout>;
   }
 
   return (
-    <AppLayout>
+    <AdminLayout>
       <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <h1 className="page-title">🏷️ Kelola Kategori</h1>
+          <h1 className="page-title">Manajemen Kategori</h1>
           <p className="page-subtitle">Atur kategori untuk mengorganisir koleksi buku</p>
         </div>
         <button className="btn btn-primary" onClick={openCreateModal}>
@@ -194,6 +194,6 @@ export default function CategoriesManagementPage() {
           )}
         </p>
       </Modal>
-    </AppLayout>
+    </AdminLayout>
   );
 }

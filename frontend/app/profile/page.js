@@ -5,7 +5,7 @@ import { useAuth } from '@/lib/AuthContext';
 import { useToast } from '@/lib/ToastContext';
 import { useRouter } from 'next/navigation';
 import ApiService from '@/lib/api';
-import AppLayout from '@/components/AppLayout';
+import StudentLayout from '@/components/StudentLayout';
 
 export default function ProfilePage() {
   const { user, loading: authLoading, refreshUser } = useAuth();
@@ -72,13 +72,13 @@ export default function ProfilePage() {
   };
 
   if (authLoading || !user) {
-    return <AppLayout><div className="loading-page"><div className="loading-spinner"></div></div></AppLayout>;
+    return <StudentLayout><div className="loading-page"><div className="loading-spinner"></div></div></StudentLayout>;
   }
 
   return (
-    <AppLayout>
+    <StudentLayout>
       <div className="page-header">
-        <h1 className="page-title">👤 Profil Saya</h1>
+        <h1 className="page-title">Profil Pengguna</h1>
         <p className="page-subtitle">Informasi akun dan pengaturan profil Anda</p>
       </div>
 
@@ -156,6 +156,6 @@ export default function ProfilePage() {
           <div className="empty-title">Profil tidak ditemukan</div>
         </div>
       )}
-    </AppLayout>
+    </StudentLayout>
   );
 }
