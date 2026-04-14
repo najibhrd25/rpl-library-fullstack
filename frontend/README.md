@@ -1,36 +1,24 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# RPLLibrary - Fullstack Monolith
 
-## Getting Started
+This project has been refactored from a split-architecture (Next.js Frontend + Express.js Backend) into a single unified **Next.js Fullstack Monolith**, utilizing Next.js App Router Serverless API Routes.
 
-First, run the development server:
+## ⚠️ Important Architectural Notices
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### 1. Removal of Express.js
+The old `backend` folder utilizing Express.js has been completely removed. All API logic, including JWT verification and Prisma Database ORM connections, have been migrated directly into `/frontend/app/api`. You no longer need to run two separate terminals!
+Just run `npm run dev` in this directory to start the whole application (frontend & API).
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Multer Dependency Dropped (File Upload Changes)
+> **Warning**: The `multer` dependency is **no longer used** for handling file uploads (Book Covers, Profile Pictures).
+Because Next.js Serverless Route Handlers do not inherently support Express middlewares like Multer, file uploads have been entirely refactored to use standard Node.js `Request.formData()`, mapping `ArrayBuffers` directly into `Buffer` parsing, and writing strictly via `fs/promises` directly to the `/public/uploads/` directory.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### 3. Vercel Deployment & Database
+When deploying to Vercel:
+- Ensure your `DATABASE_URL` in the Vercel Dashboard points to a **Cloud Database** (e.g., Supabase PostgreSQL, Neon, Railway). It cannot point to a local Mac URL (`localhost:5433`).
+- Add `JWT_SECRET` to the environment variables on Vercel.
+- The `postinstall` script or Vercel Build process will automatically run `npx prisma generate` to build the required query engines.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Available Scripts
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `npm run dev`: Starts the Next.js development server (both UI and API).
+- `npm run build`: Builds the application for production.
