@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import ApiService from '@/lib/api';
 import AdminLayout from '@/components/AdminLayout';
 import Modal from '@/components/Modal';
+import { ArrowLeftRight, List, BookOpen, CheckCircle } from 'lucide-react';
 
 export default function TransactionsManagementPage() {
   const { user, loading: authLoading } = useAuth();
@@ -48,7 +49,7 @@ export default function TransactionsManagementPage() {
     setSubmitting(true);
     try {
       await ApiService.returnBook(selectedTransaction.id);
-      toast.success('Pengembalian buku berhasil dikonfirmasi! ✅');
+      toast.success('Pengembalian buku berhasil dikonfirmasi!');
       setReturnModalOpen(false);
       setSelectedTransaction(null);
       fetchTransactions();
@@ -71,20 +72,22 @@ export default function TransactionsManagementPage() {
   return (
     <AdminLayout>
       <div className="page-header">
-        <h1 className="page-title">Sirkulasi Data</h1>
+        <h1 className="page-title flex items-center" style={{ gap: '14px' }}>
+          <ArrowLeftRight size={28} /> Sirkulasi Data
+        </h1>
         <p className="page-subtitle">Lihat semua peminjaman dan konfirmasi pengembalian buku</p>
       </div>
 
       {/* Filter Tabs */}
       <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', flexWrap: 'wrap' }}>
         {[
-          { value: 'ALL', label: 'Semua', icon: '📋' },
-          { value: 'BORROWED', label: 'Dipinjam', icon: '📖' },
-          { value: 'RETURNED', label: 'Dikembalikan', icon: '✅' },
+          { value: 'ALL', label: 'Semua', icon: <List size={16} /> },
+          { value: 'BORROWED', label: 'Dipinjam', icon: <BookOpen size={16} /> },
+          { value: 'RETURNED', label: 'Dikembalikan', icon: <CheckCircle size={16} /> },
         ].map((tab) => (
           <button
             key={tab.value}
-            className={`btn ${filter === tab.value ? 'btn-primary' : 'btn-secondary'} btn-sm`}
+            className={`btn ${filter === tab.value ? 'btn-primary' : 'btn-secondary'} btn-sm flex items-center gap-2`}
             onClick={() => setFilter(tab.value)}
           >
             {tab.icon} {tab.label}
@@ -106,9 +109,9 @@ export default function TransactionsManagementPage() {
       {loading ? (
         <div className="loading-page"><div className="loading-spinner"></div><div className="loading-text">Memuat transaksi...</div></div>
       ) : filteredTransactions.length === 0 ? (
-        <div className="empty-state">
-          <div className="empty-icon">📋</div>
-          <div className="empty-title">Tidak ada transaksi</div>
+        <div className="empty-state flex flex-col items-center p-12 text-center text-gray-500">
+          <div className="empty-icon mb-4"><List size={48} strokeWidth={1} color="var(--primary-light)" /></div>
+          <div className="empty-title text-xl font-bold text-gray-700">Tidak ada transaksi</div>
           <div className="empty-description">
             {filter !== 'ALL'
               ? 'Tidak ada transaksi dengan status tersebut.'
@@ -159,13 +162,13 @@ export default function TransactionsManagementPage() {
                   <td>
                     {t.status === 'BORROWED' ? (
                       <button
-                        className="btn btn-success btn-sm"
+                        className="btn btn-success btn-sm flex items-center gap-2"
                         onClick={() => {
                           setSelectedTransaction(t);
                           setReturnModalOpen(true);
                         }}
                       >
-                        ✅ Konfirmasi Return
+                        <CheckCircle size={16} /> Konfirmasi Return
                       </button>
                     ) : (
                       <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>Selesai</span>
@@ -182,12 +185,12 @@ export default function TransactionsManagementPage() {
       <Modal
         isOpen={returnModalOpen}
         onClose={() => setReturnModalOpen(false)}
-        title="✅ Konfirmasi Pengembalian"
+        title="Konfirmasi Pengembalian"
         footer={
           <>
             <button className="btn btn-secondary" onClick={() => setReturnModalOpen(false)}>Batal</button>
-            <button className="btn btn-success" onClick={handleReturn} disabled={submitting}>
-              {submitting ? 'Memproses...' : '✅ Konfirmasi Pengembalian'}
+            <button className="btn btn-success flex items-center justify-center gap-2" onClick={handleReturn} disabled={submitting}>
+              {submitting ? 'Memproses...' : <><CheckCircle size={16} /> Konfirmasi Pengembalian</>}
             </button>
           </>
         }

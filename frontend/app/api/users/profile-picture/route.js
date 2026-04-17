@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { getUserFromRequest } from '@/lib/auth-server';
-import { promises as fs } from 'fs';
-import path from 'path';
+
 
 export async function PUT(request) {
   try {
@@ -19,14 +18,8 @@ export async function PUT(request) {
     }
 
     const buffer = Buffer.from(await profilePictureFile.arrayBuffer());
-    const ext = path.extname(profilePictureFile.name);
-    const filename = `profilePicture-${Date.now()}-${Math.round(Math.random() * 1e9)}${ext}`;
-    const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'profiles');
-
-    await fs.mkdir(uploadDir, { recursive: true });
-    await fs.writeFile(path.join(uploadDir, filename), buffer);
-    
-    const profilePicturePath = `/uploads/profiles/${filename}`;
+    const mimeType = profilePictureFile.type || 'image/jpeg';
+    const profilePicturePath = `data:${mimeType};base64,${buffer.toString('base64')}`;
 
     const updatedUser = await prisma.user.update({
       where: { id: user.id },

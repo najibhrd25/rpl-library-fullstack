@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { getUserFromRequest } from '@/lib/auth-server';
-import { promises as fs } from 'fs';
-import path from 'path';
+
 
 export async function GET(request) {
   try {
@@ -54,15 +53,9 @@ export async function POST(request) {
     let coverImagePath = null;
     if (coverImageFile && coverImageFile.name) {
       const buffer = Buffer.from(await coverImageFile.arrayBuffer());
-      const ext = path.extname(coverImageFile.name);
-      const filename = `coverImage-${Date.now()}-${Math.round(Math.random() * 1e9)}${ext}`;
-      const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'covers');
-
-      await fs.mkdir(uploadDir, { recursive: true });
-      await fs.writeFile(path.join(uploadDir, filename), buffer);
-      
-      // Save accessible path
-      coverImagePath = `/uploads/covers/${filename}`;
+      const mimeType = coverImageFile.type || 'image/jpeg';
+      // Save directly as Base64 Data URI to prevent Vercel read-only filesystem crash
+      coverImagePath = `data:${mimeType};base64,${buffer.toString('base64')}`;
     }
 
     const book = await prisma.book.create({

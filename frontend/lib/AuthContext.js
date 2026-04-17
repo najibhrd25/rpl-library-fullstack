@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import ApiService from '@/lib/api';
+import { getSession, signOut as nextAuthSignOut } from 'next-auth/react';
 
 const AuthContext = createContext(null);
 
@@ -10,12 +11,28 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check for existing auth on mount
-    const savedUser = ApiService.getUser();
-    const token = ApiService.getToken();
-    
-    if (savedUser && token) {
-      setUser(savedUser);
+    const initAuth = async () => {
+      try {
+        // Cek sesi OAuth Google (NextAuth) terlebih dahulu
+        const session = await getSession();
+        if (session && session.systemToken) {
+          // Sinkronkan token NextAuth ke localStorage sistem lama kita
+          ApiService.setToken(session.systemToken);
+          setUser({ ...session.user, id: session.user.id, role: session.user.role });
+          ApiService.setUser({ ...session.user, id: session.user.id, role: session.user.role });
+          setLoading(false);
+          return;
+        }
+      } catch (err) {
+        console.error("Gagal memeriksa sesi OAuth:", err);
+      }
+
+      // Check for existing auth on mount
+      const savedUser = ApiService.getUser();
+      const token = ApiService.getToken();
+      
+      if (savedUser && token) {
+        setUser(savedUser);
       // Verify token is still valid by fetching profile
       ApiService.getProfile()
         .then((data) => {
@@ -28,9 +45,12 @@ export function AuthProvider({ children }) {
           setUser(null);
         })
         .finally(() => setLoading(false));
-    } else {
-      setLoading(false);
-    }
+      } else {
+        setLoading(false);
+      }
+    };
+    
+    initAuth();
   }, []);
 
   const login = useCallback(async (email, password) => {
@@ -46,6 +66,7 @@ export function AuthProvider({ children }) {
   const logout = useCallback(() => {
     ApiService.removeToken();
     setUser(null);
+    nextAuthSignOut({ redirect: false }).catch(() => {});
   }, []);
 
   const refreshUser = useCallback(async () => {

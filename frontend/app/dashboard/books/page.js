@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import ApiService from '@/lib/api';
 import AdminLayout from '@/components/AdminLayout';
 import Modal from '@/components/Modal';
+import { Library, Plus, Pencil, Trash2, Image as ImageIcon, UploadCloud } from 'lucide-react';
 
 export default function BooksManagementPage() {
   const { user, loading: authLoading } = useAuth();
@@ -103,10 +104,10 @@ export default function BooksManagementPage() {
 
       if (editingBook) {
         await ApiService.updateBook(editingBook.id, fd);
-        toast.success('Buku berhasil diperbarui! ✏️');
+        toast.success('Buku berhasil diperbarui!');
       } else {
         await ApiService.createBook(fd);
-        toast.success('Buku berhasil ditambahkan! 📖');
+        toast.success('Buku berhasil ditambahkan!');
       }
       setModalOpen(false);
       fetchBooks();
@@ -141,22 +142,24 @@ export default function BooksManagementPage() {
     <AdminLayout>
       <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <h1 className="page-title">Inventaris Buku</h1>
+          <h1 className="page-title flex items-center" style={{ gap: '14px' }}>
+            <Library size={28} /> Inventaris Buku
+          </h1>
           <p className="page-subtitle">Tambah, edit, atau hapus koleksi buku perpustakaan</p>
         </div>
         <button className="btn btn-primary" onClick={openCreateModal}>
-          + Tambah Buku
+          <Plus size={18} /> Tambah Buku
         </button>
       </div>
 
       {loading ? (
         <div className="loading-page"><div className="loading-spinner"></div><div className="loading-text">Memuat buku...</div></div>
       ) : books.length === 0 ? (
-        <div className="empty-state">
-          <div className="empty-icon">📚</div>
-          <div className="empty-title">Belum ada buku</div>
-          <div className="empty-description">Mulai tambahkan buku pertama ke perpustakaan.</div>
-          <button className="btn btn-primary" onClick={openCreateModal}>+ Tambah Buku Pertama</button>
+        <div className="empty-state flex flex-col items-center p-12 text-center text-gray-500">
+          <div className="empty-icon mb-4"><Library size={48} strokeWidth={1} color="var(--primary-light)" /></div>
+          <div className="empty-title text-xl font-bold text-gray-700">Belum ada buku</div>
+          <div className="empty-description mt-2">Mulai tambahkan buku pertama ke perpustakaan.</div>
+          <button className="btn btn-primary mt-6" onClick={openCreateModal}><Plus size={18} /> Tambah Buku Pertama</button>
         </div>
       ) : (
         <div className="table-wrapper animate-fade-in">
@@ -183,7 +186,7 @@ export default function BooksManagementPage() {
                         <img src={book.coverImage} alt={book.title}
                           style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                       ) : (
-                        <span style={{ fontSize: '1.2rem', opacity: 0.3 }}>📖</span>
+                        <span style={{ fontSize: '1.2rem', opacity: 0.3 }}><ImageIcon size={24} /></span>
                       )}
                     </div>
                   </td>
@@ -200,13 +203,13 @@ export default function BooksManagementPage() {
                     </span>
                   </td>
                   <td>
-                    <div className="table-actions">
-                      <button className="btn-icon" title="Edit" onClick={() => openEditModal(book)}>✏️</button>
+                    <div className="table-actions flex gap-2">
+                      <button className="btn-icon" title="Edit" onClick={() => openEditModal(book)}><Pencil size={16} /></button>
                       <button className="btn-icon" title="Hapus" style={{ color: 'var(--error)' }}
                         onClick={() => {
                           setDeletingBook(book);
                           setDeleteModalOpen(true);
-                        }}>🗑️</button>
+                        }}><Trash2 size={16} /></button>
                     </div>
                   </td>
                 </tr>
@@ -220,7 +223,7 @@ export default function BooksManagementPage() {
       <Modal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
-        title={editingBook ? '✏️ Edit Buku' : '📖 Tambah Buku Baru'}
+        title={editingBook ? 'Edit Buku' : 'Tambah Buku Baru'}
       >
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -285,8 +288,8 @@ export default function BooksManagementPage() {
                   style={{ maxHeight: '120px', borderRadius: '8px', objectFit: 'cover' }} />
               ) : (
                 <>
-                  <div className="upload-icon">📷</div>
-                  <div className="upload-text">
+                  <div className="upload-icon mb-2 flex justify-center text-[var(--primary-light)]"><UploadCloud size={32} /></div>
+                  <div className="upload-text text-sm">
                     Klik untuk <strong>upload gambar cover</strong>
                     <br />
                     <span style={{ fontSize: '0.75rem' }}>PNG, JPG, JPEG (max 5MB)</span>
@@ -315,7 +318,7 @@ export default function BooksManagementPage() {
       <Modal
         isOpen={deleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}
-        title="🗑️ Hapus Buku"
+        title="Hapus Buku"
         footer={
           <>
             <button className="btn btn-secondary" onClick={() => setDeleteModalOpen(false)}>Batal</button>

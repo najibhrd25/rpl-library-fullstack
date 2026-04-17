@@ -6,6 +6,7 @@ import { useToast } from '@/lib/ToastContext';
 import { useRouter } from 'next/navigation';
 import ApiService from '@/lib/api';
 import StudentLayout from '@/components/StudentLayout';
+import { Camera, UserCircle, Shield, Book } from 'lucide-react';
 
 export default function ProfilePage() {
   const { user, loading: authLoading, refreshUser } = useAuth();
@@ -57,7 +58,7 @@ export default function ProfilePage() {
     setUploading(true);
     try {
       await ApiService.uploadProfilePicture(file);
-      toast.success('Foto profil berhasil diperbarui! 📷');
+      toast.success('Foto profil berhasil diperbarui!');
       fetchProfile();
       refreshUser();
     } catch (err) {
@@ -106,7 +107,7 @@ export default function ProfilePage() {
                     Mengupload...
                   </span>
                 ) : (
-                  '📷 Ubah Foto'
+                  <span className="flex items-center gap-2"><Camera size={14} /> Ubah Foto</span>
                 )}
               </button>
               <input
@@ -121,8 +122,8 @@ export default function ProfilePage() {
             <div className="profile-details">
               <h2 className="profile-name">{profile.name}</h2>
               <p className="profile-email">{profile.email}</p>
-              <span className={`role-badge ${profile.role?.toLowerCase()}`} style={{ marginBottom: '24px', display: 'inline-flex' }}>
-                {profile.role === 'ADMIN' ? '👑 ' : '📚 '}{profile.role}
+              <span className={`role-badge ${profile.role?.toLowerCase()}`} style={{ marginBottom: '24px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                {profile.role === 'ADMIN' ? <Shield size={14} /> : <Book size={14} />}{profile.role}
               </span>
 
               <div className="profile-info-grid">
@@ -151,8 +152,8 @@ export default function ProfilePage() {
           </div>
         </div>
       ) : (
-        <div className="empty-state">
-          <div className="empty-icon">👤</div>
+        <div className="empty-state flex flex-col items-center">
+          <div className="empty-icon mb-4"><UserCircle size={48} color="var(--primary-light)" /></div>
           <div className="empty-title">Profil tidak ditemukan</div>
         </div>
       )}

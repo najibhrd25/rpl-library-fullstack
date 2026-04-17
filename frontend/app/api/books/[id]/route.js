@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { getUserFromRequest } from '@/lib/auth-server';
-import { promises as fs } from 'fs';
-import path from 'path';
+
 
 export async function PUT(request, { params }) {
   try {
@@ -22,16 +21,8 @@ export async function PUT(request, { params }) {
     let coverImagePath = undefined;
     if (coverImageFile && coverImageFile.name) {
       const buffer = Buffer.from(await coverImageFile.arrayBuffer());
-      const ext = path.extname(coverImageFile.name);
-      const filename = `coverImage-${Date.now()}-${Math.round(Math.random() * 1e9)}${ext}`;
-      const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'covers');
-
-      await fs.mkdir(uploadDir, { recursive: true });
-      await fs.writeFile(path.join(uploadDir, filename), buffer);
-      
-      coverImagePath = `/uploads/covers/${filename}`;
-
-      // Optional: Clean up old cover image here if necessary
+      const mimeType = coverImageFile.type || 'image/jpeg';
+      coverImagePath = `data:${mimeType};base64,${buffer.toString('base64')}`;
     }
 
     const dataToUpdate = {};

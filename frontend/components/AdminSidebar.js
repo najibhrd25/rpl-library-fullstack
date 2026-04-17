@@ -3,8 +3,9 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/lib/AuthContext';
+import { LayoutDashboard, BookCopy, Tags, ArrowRightLeft, LogOut, X } from 'lucide-react';
 
-export default function AdminSidebar() {
+export default function AdminSidebar({ mobileOpen, closeMobile }) {
   const pathname = usePathname();
   const { logout } = useAuth();
 
@@ -14,30 +15,35 @@ export default function AdminSidebar() {
     { 
       href: '/dashboard', 
       label: 'Ringkasan',
-      icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+      icon: <LayoutDashboard size={18} strokeWidth={1.5} />
     },
     { 
       href: '/dashboard/books', 
       label: 'Koleksi',
-      icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+      icon: <BookCopy size={18} strokeWidth={1.5} />
     },
     { 
       href: '/dashboard/categories', 
       label: 'Kategori',
-      icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><line x1="4" y1="9" x2="20" y2="9"></line><line x1="4" y1="15" x2="20" y2="15"></line><line x1="10" y1="3" x2="8" y2="21"></line><line x1="16" y1="3" x2="14" y2="21"></line></svg>
+      icon: <Tags size={18} strokeWidth={1.5} />
     },
     { 
       href: '/dashboard/transactions', 
       label: 'Sirkulasi',
-      icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+      icon: <ArrowRightLeft size={18} strokeWidth={1.5} />
     },
   ];
 
   return (
-    <aside className="admin-sidebar">
-      <div className="admin-sidebar-header">
-        <div className="admin-logo">RL</div>
-        <span className="admin-brand">Workspace</span>
+    <aside className={`admin-sidebar ${mobileOpen ? 'open' : ''}`}>
+      <div className="admin-sidebar-header flex justify-between items-center w-full">
+        <div className="flex items-center" style={{ gap: '12px' }}>
+          <div className="admin-logo" style={{background: 'var(--primary-gradient)', color: '#fff', borderRadius: '8px', padding: '4px 8px', fontWeight: 'bold'}}>SE</div>
+          <span className="admin-brand font-semibold text-[1.05rem]" style={{color: 'var(--primary-dark)'}}>Lab Workspace</span>
+        </div>
+        <button className="md:hidden text-gray-500" onClick={closeMobile} id="close-btn" style={{ display: 'none' }}>
+           <X size={20} />
+        </button>
       </div>
 
       <div className="admin-sidebar-content">
@@ -48,6 +54,7 @@ export default function AdminSidebar() {
               <Link
                 key={link.href}
                 href={link.href}
+                onClick={() => { if (window.innerWidth <= 768) closeMobile(); }}
                 className={`admin-nav-link ${isActive(link.href) ? 'active' : ''}`}
               >
                 <span className="icon">{link.icon}</span>
@@ -58,14 +65,23 @@ export default function AdminSidebar() {
         </div>
       </div>
 
-      <div className="admin-sidebar-footer">
-        <button onClick={logout} className="admin-nav-link text-error w-full text-left" style={{ border: 'none', background: 'transparent', cursor: 'pointer', padding: '10px 14px' }}>
-          <span className="icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-          </span>
-          Keluar Sistem
+      <div className="admin-sidebar-footer" style={{ padding: '0 24px 24px' }}>
+        <button 
+          onClick={logout} 
+          className="w-full flex items-center gap-2 rounded-xl transition-all cursor-pointer shadow-sm" 
+          style={{ padding: '12px', backgroundColor: '#EF4444', color: '#FFFFFF', border: 'none', fontWeight: 600, justifyContent: 'center', textAlign: 'center' }}
+          onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#DC2626'; e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(239, 68, 68, 0.25)'; }}
+          onMouseOut={(e) => { e.currentTarget.style.backgroundColor = '#EF4444'; e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'var(--shadow-sm)'; }}
+        >
+          <LogOut size={18} strokeWidth={2.5} />
+          <span>Keluar Sistem</span>
         </button>
       </div>
+      <style jsx>{`
+        @media (max-width: 768px) {
+          #close-btn { display: block !important; }
+        }
+      `}</style>
     </aside>
   );
 }

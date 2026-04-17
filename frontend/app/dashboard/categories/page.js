@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import ApiService from '@/lib/api';
 import AdminLayout from '@/components/AdminLayout';
 import Modal from '@/components/Modal';
+import { Tags, Pencil, Trash2, AlertTriangle, Plus } from 'lucide-react';
 
 export default function CategoriesManagementPage() {
   const { user, loading: authLoading } = useAuth();
@@ -102,22 +103,24 @@ export default function CategoriesManagementPage() {
     <AdminLayout>
       <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <h1 className="page-title">Manajemen Kategori</h1>
+          <h1 className="page-title flex items-center" style={{ gap: '14px' }}>
+            <Tags size={28} /> Manajemen Kategori
+          </h1>
           <p className="page-subtitle">Atur kategori untuk mengorganisir koleksi buku</p>
         </div>
         <button className="btn btn-primary" onClick={openCreateModal}>
-          + Tambah Kategori
+          <Plus size={18} /> Tambah Kategori
         </button>
       </div>
 
       {loading ? (
         <div className="loading-page"><div className="loading-spinner"></div><div className="loading-text">Memuat kategori...</div></div>
       ) : categories.length === 0 ? (
-        <div className="empty-state">
-          <div className="empty-icon">🏷️</div>
-          <div className="empty-title">Belum ada kategori</div>
-          <div className="empty-description">Buat kategori pertama untuk mengorganisir buku.</div>
-          <button className="btn btn-primary" onClick={openCreateModal}>+ Buat Kategori Pertama</button>
+        <div className="empty-state flex flex-col items-center p-12 text-center text-gray-500">
+          <div className="empty-icon mb-4"><Tags size={48} strokeWidth={1} color="var(--primary-light)" /></div>
+          <div className="empty-title text-xl font-bold text-gray-700">Belum ada kategori</div>
+          <div className="empty-description mt-2">Buat kategori pertama untuk mengorganisir buku.</div>
+          <button className="btn btn-primary mt-6" onClick={openCreateModal}><Plus size={18} /> Buat Kategori Pertama</button>
         </div>
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '16px' }}
@@ -125,20 +128,20 @@ export default function CategoriesManagementPage() {
           {categories.map((cat) => (
             <div key={cat.id} className="card" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div>
-                <div style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '4px' }}>
-                  🏷️ {cat.name}
+                <div style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Tags size={16} color="var(--primary)" /> {cat.name}
                 </div>
-                <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginLeft: '24px' }}>
                   {cat._count?.books || 0} buku
                 </div>
               </div>
-              <div className="table-actions">
-                <button className="btn-icon" title="Edit" onClick={() => openEditModal(cat)}>✏️</button>
+              <div className="table-actions flex gap-2">
+                <button className="btn-icon" title="Edit" onClick={() => openEditModal(cat)}><Pencil size={16} /></button>
                 <button className="btn-icon" title="Hapus" style={{ color: 'var(--error)' }}
                   onClick={() => {
                     setDeletingCategory(cat);
                     setDeleteModalOpen(true);
-                  }}>🗑️</button>
+                  }}><Trash2 size={16} /></button>
               </div>
             </div>
           ))}
@@ -149,7 +152,7 @@ export default function CategoriesManagementPage() {
       <Modal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
-        title={editingCategory ? '✏️ Edit Kategori' : '🏷️ Tambah Kategori Baru'}
+        title={editingCategory ? 'Edit Kategori' : 'Tambah Kategori Baru'}
       >
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -175,7 +178,7 @@ export default function CategoriesManagementPage() {
       <Modal
         isOpen={deleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}
-        title="🗑️ Hapus Kategori"
+        title="Hapus Kategori"
         footer={
           <>
             <button className="btn btn-secondary" onClick={() => setDeleteModalOpen(false)}>Batal</button>
@@ -188,8 +191,8 @@ export default function CategoriesManagementPage() {
         <p className="confirm-text">
           Apakah Anda yakin ingin menghapus kategori <span className="confirm-highlight">&quot;{deletingCategory?.name}&quot;</span>?
           {deletingCategory?._count?.books > 0 && (
-            <span style={{ display: 'block', marginTop: '8px', color: 'var(--warning)' }}>
-              ⚠️ Kategori ini memiliki {deletingCategory._count.books} buku terkait dan tidak bisa dihapus.
+            <span style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '12px', color: 'var(--warning)', fontWeight: 500 }}>
+              <AlertTriangle size={18} /> Kategori ini memiliki {deletingCategory._count.books} buku terkait dan tidak bisa dihapus.
             </span>
           )}
         </p>
