@@ -41,7 +41,7 @@ export default function AdminLayout({ children }) {
         ></div>
       )}
       <AdminSidebar mobileOpen={mobileMenuOpen} closeMobile={() => setMobileMenuOpen(false)} />
-      <main className="admin-main-content">
+      <main className="admin-main-content" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         <div className="admin-topbar">
           <div className="flex items-center gap-3">
             <button 
@@ -61,9 +61,12 @@ export default function AdminLayout({ children }) {
             <span className="text-sm font-medium">{user.role === 'ADMIN' ? 'Admin' : user.name}</span>
           </div>
         </div>
-        <div className="admin-page-container">
+        <div className="admin-page-container" style={{ flex: 1 }}>
           {children}
         </div>
+        <footer style={{ padding: '10px 16px', textAlign: 'center', fontSize: '0.72rem', color: '#9CA3AF', borderTop: '1px solid #F3F4F6', marginTop: 'auto' }}>
+          © 2026 Software Engineer Laboratory. All Rights Reserved.
+        </footer>
       </main>
       <style jsx>{`
         @media (max-width: 768px) {

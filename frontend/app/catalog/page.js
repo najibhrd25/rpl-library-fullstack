@@ -14,6 +14,7 @@ export default function CatalogPage() {
   const [search, setSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
   const [selectedBook, setSelectedBook] = useState(null);
+  const [borrowDuration, setBorrowDuration] = useState(7);
   const [borrowing, setBorrowing] = useState(false);
   const { user } = useAuth();
   const toast = useToast();
@@ -53,7 +54,7 @@ export default function CatalogPage() {
     return () => clearTimeout(debounce);
   }, [search, categoryFilter, fetchBooks]);
 
-  const handleBorrow = async (bookId) => {
+  const handleBorrow = async (bookId, durationDays = 7) => {
     if (!user) {
       toast.warning('Silakan masuk terlebih dahulu untuk meminjam buku');
       return;
@@ -64,7 +65,7 @@ export default function CatalogPage() {
     }
     setBorrowing(true);
     try {
-      await ApiService.borrowBook(bookId);
+      await ApiService.borrowBook(bookId, durationDays);
       toast.success('Peminjaman berhasil diproses. Selamat membaca!');
       setSelectedBook(null);
       fetchBooks();
@@ -77,12 +78,12 @@ export default function CatalogPage() {
 
   return (
     <StudentLayout>
-      <div className="page-header animate-fade-in">
+      <div className="page-header animate-fade-in" style={{ marginBottom: '40px', padding: '10px 0' }}>
         <h1 className="page-title">Eksplorasi Katalog</h1>
         <p className="page-subtitle">Temukan koleksi literasi pilihan untuk pengembangan diri Anda</p>
       </div>
 
-      <div className="catalog-controls animate-fade-in" style={{ animationDelay: '0.1s' }}>
+      <div className="catalog-controls animate-fade-in" style={{ animationDelay: '0.1s', marginBottom: '36px' }}>
         <div className="search-wrapper">
           <div className="search-icon">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
@@ -137,9 +138,9 @@ export default function CatalogPage() {
               className="book-card"
               onClick={() => setSelectedBook(book)}
             >
-              <div className="book-cover">
+              <div className="book-cover" style={{ aspectRatio: '2/3', background: '#f5f5f5' }}>
                 {book.coverImage ? (
-                  <img src={book.coverImage} alt={book.title} />
+                  <img src={book.coverImage} alt={book.title} loading="lazy" decoding="async" />
                 ) : (
                   <div className="no-cover">
                     <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
@@ -162,10 +163,10 @@ export default function CatalogPage() {
                       className="btn btn-primary btn-sm"
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleBorrow(book.id);
+                        handleBorrow(book.id, 7); // Default pinjam cepat: 7 Hari
                       }}
                     >
-                      Pinjam
+                      Pinjam (7 Hari)
                     </button>
                   )}
                 </div>
@@ -181,17 +182,34 @@ export default function CatalogPage() {
         onClose={() => setSelectedBook(null)}
         title={selectedBook?.title || 'Detail Buku'}
         footer={
-          <div className="flex gap-md">
-            <button className="btn btn-secondary" onClick={() => setSelectedBook(null)}>Tutup</button>
-            {user && user.role === 'MEMBER' && selectedBook?.stock > 0 && (
-              <button
-                className="btn btn-primary"
-                onClick={() => handleBorrow(selectedBook.id)}
-                disabled={borrowing}
-              >
-                {borrowing ? 'Sedang Memproses...' : 'Pinjam Buku'}
-              </button>
-            )}
+          <div className="flex gap-md" style={{ width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
+            {user && user.role === 'MEMBER' && selectedBook?.stock > 0 ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Durasi:</span>
+                <select 
+                  className="form-select btn-sm" 
+                  value={borrowDuration} 
+                  onChange={(e) => setBorrowDuration(Number(e.target.value))}
+                  style={{ padding: '6px 32px 6px 12px', fontSize: '0.85rem' }}
+                >
+                  <option value={3}>3 Hari</option>
+                  <option value={7}>7 Hari</option>
+                  <option value={14}>14 Hari</option>
+                </select>
+              </div>
+            ) : <div />}
+            <div className="flex gap-sm">
+              <button className="btn btn-secondary" onClick={() => setSelectedBook(null)}>Tutup</button>
+              {user && user.role === 'MEMBER' && selectedBook?.stock > 0 && (
+                <button
+                  className="btn btn-primary"
+                  onClick={() => handleBorrow(selectedBook.id, borrowDuration)}
+                  disabled={borrowing}
+                >
+                  {borrowing ? 'Memproses...' : 'Pinjam Sekarang'}
+                </button>
+              )}
+            </div>
           </div>
         }
       >

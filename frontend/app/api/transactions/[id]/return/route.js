@@ -2,11 +2,12 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { getUserFromRequest } from '@/lib/auth-server';
 
-export async function PUT(request, { params }) {
+export async function PUT(request, props) {
   try {
+    const params = await props.params;
     const user = await getUserFromRequest(request);
-    if (!user || user.role !== 'ADMIN') {
-      return NextResponse.json({ status: 'error', message: 'Forbidden: Admins only' }, { status: 403 });
+    if (!user) {
+      return NextResponse.json({ status: 'error', message: 'Unauthorized' }, { status: 401 });
     }
 
     const transactionId = parseInt(params.id, 10);
@@ -19,6 +20,12 @@ export async function PUT(request, { params }) {
       if (!transaction) {
         throw new Error('Transaction not found');
       }
+      
+      // Authorization Check
+      if (user.role !== 'ADMIN' && transaction.userId !== user.id) {
+        throw new Error('Forbidden: You can only return your own books');
+      }
+
       if (transaction.status === 'RETURNED') {
         throw new Error('Book is already returned');
       }
@@ -37,6 +44,9 @@ export async function PUT(request, { params }) {
       });
 
       return updatedTransaction;
+    }, {
+      maxWait: 10000, 
+      timeout: 20000,
     });
 
     return NextResponse.json({

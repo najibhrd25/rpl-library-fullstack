@@ -3,8 +3,9 @@ import prisma from '@/lib/db';
 import { getUserFromRequest } from '@/lib/auth-server';
 
 
-export async function PUT(request, { params }) {
+export async function PUT(request, props) {
   try {
+    const params = await props.params;
     const user = await getUserFromRequest(request);
     if (!user || user.role !== 'ADMIN') {
       return NextResponse.json({ status: 'error', message: 'Forbidden: Admins only' }, { status: 403 });
@@ -52,8 +53,9 @@ export async function PUT(request, { params }) {
   }
 }
 
-export async function DELETE(request, { params }) {
+export async function DELETE(request, props) {
   try {
+    const params = await props.params;
     const user = await getUserFromRequest(request);
     if (!user || user.role !== 'ADMIN') {
       return NextResponse.json({ status: 'error', message: 'Forbidden: Admins only' }, { status: 403 });

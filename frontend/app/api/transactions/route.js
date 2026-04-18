@@ -9,6 +9,33 @@ export async function GET(request) {
       return NextResponse.json({ status: 'error', message: 'Unauthorized' }, { status: 401 });
     }
 
+    // Auto-return lazy evaluation (Berdasarkan Due Date yang dipilih peminjam)
+    // Deteksi buku yang telat dikembalikan melewati Due Date
+    const now = new Date();
+
+    const expiredTransactions = await prisma.transaction.findMany({
+      where: {
+        status: 'BORROWED',
+        dueDate: { lt: now }
+      }
+    });
+
+    // Proses pengembalian otomatis
+    if (expiredTransactions.length > 0) {
+      for (const t of expiredTransactions) {
+        await prisma.$transaction([
+          prisma.transaction.update({
+            where: { id: t.id },
+            data: { status: 'RETURNED', returnDate: new Date() }
+          }),
+          prisma.book.update({
+            where: { id: t.bookId },
+            data: { stock: { increment: 1 } }
+          })
+        ]);
+      }
+    }
+
     let transactions;
     if (user.role === 'ADMIN') {
       transactions = await prisma.transaction.findMany({

@@ -51,7 +51,7 @@ export default function MyBorrowingsPage() {
 
   return (
     <StudentLayout>
-      <div className="page-header">
+      <div className="page-header animate-fade-in" style={{ marginBottom: '40px', padding: '10px 0' }}>
         <h1 className="page-title">Riwayat Peminjaman</h1>
         <p className="page-subtitle">Riwayat peminjaman buku Anda di perpustakaan RPL</p>
       </div>
@@ -127,6 +127,23 @@ export default function MyBorrowingsPage() {
                     })}</>
                   )}
                 </div>
+                {t.status === 'BORROWED' && (
+                  <button 
+                    onClick={async () => {
+                      try {
+                        await ApiService.returnBook(t.id);
+                        toast.success('Buku berhasil dikembalikan!');
+                        fetchTransactions(); // Refresh data
+                      } catch (err) {
+                        toast.error(err.message || 'Gagal mengembalikan buku');
+                      }
+                    }}
+                    className="btn btn-outline btn-sm" 
+                    style={{ marginTop: '8px', padding: '4px 8px', fontSize: '0.75rem', borderColor: 'var(--primary)', color: 'var(--primary)' }}
+                  >
+                    Kembalikan Manual
+                  </button>
+                )}
               </div>
             </div>
           ))}

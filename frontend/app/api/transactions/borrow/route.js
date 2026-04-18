@@ -9,7 +9,7 @@ export async function POST(request) {
       return NextResponse.json({ status: 'error', message: 'Forbidden: Members only' }, { status: 403 });
     }
 
-    const { bookId } = await request.json();
+    const { bookId, durationDays = 7 } = await request.json();
 
     const result = await prisma.$transaction(async (prisma) => {
       const book = await prisma.book.findUnique({ where: { id: bookId } });
@@ -25,15 +25,23 @@ export async function POST(request) {
         data: { stock: book.stock - 1 },
       });
 
+      // Kalkulasi tanggal pengembalian
+      const dueDate = new Date();
+      dueDate.setDate(dueDate.getDate() + parseInt(durationDays, 10));
+
       const transaction = await prisma.transaction.create({
         data: {
           userId: user.id,
           bookId,
+          dueDate,
           status: 'BORROWED',
         },
       });
 
       return transaction;
+    }, {
+      maxWait: 10000, // default is 2000
+      timeout: 20000, // default is 5000
     });
 
     return NextResponse.json({

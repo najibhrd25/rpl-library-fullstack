@@ -48,6 +48,7 @@ model Transaction {
   bookId     Int
   book       Book              @relation(fields: [bookId], references: [id])
   borrowDate DateTime          @default(now())
+  dueDate    DateTime?
   returnDate DateTime?
   status     TransactionStatus @default(BORROWED)
   createdAt  DateTime          @default(now())

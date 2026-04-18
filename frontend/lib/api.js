@@ -165,10 +165,10 @@ class ApiService {
     return this.request('/transactions');
   }
 
-  static async borrowBook(bookId) {
+  static async borrowBook(bookId, durationDays = 7) {
     return this.request('/transactions/borrow', {
       method: 'POST',
-      body: JSON.stringify({ bookId }),
+      body: JSON.stringify({ bookId, durationDays }),
     });
   }
 

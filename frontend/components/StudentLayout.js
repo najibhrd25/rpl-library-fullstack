@@ -38,10 +38,13 @@ export default function StudentLayout({ children }) {
         ></div>
       )}
       <StudentNavbar mobileOpen={mobileMenuOpen} setMobileOpen={setMobileMenuOpen} />
-      <main className="student-main-content">
-        <div className="student-page-container">
+      <main className="student-main-content" style={{ display: 'flex', flexDirection: 'column', minHeight: 'calc(100vh - 64px)' }}>
+        <div className="student-page-container" style={{ flex: 1 }}>
           {children}
         </div>
+        <footer style={{ padding: '10px 16px', textAlign: 'center', fontSize: '0.72rem', color: '#9CA3AF', borderTop: '1px solid #F3F4F6', marginTop: 'auto' }}>
+          © 2026 Software Engineer Laboratory. All Rights Reserved.
+        </footer>
       </main>
     </div>
   );

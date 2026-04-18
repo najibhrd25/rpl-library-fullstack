@@ -23,9 +23,8 @@ export default function StudentNavbar({ mobileOpen, setMobileOpen }) {
           >
             {mobileOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
-          <Link href="/catalog" className="student-brand flex items-center" style={{ gap: '12px' }}>
-            <div style={{background: 'var(--primary-gradient)', color: '#fff', borderRadius: '6px', padding: '2px 8px', fontWeight: 'bold'}}>SE</div>
-            <span className="student-brand-text font-semibold text-[1.1rem]" style={{color: 'var(--primary-dark)'}}>Katalog</span>
+          <Link href="/catalog" className="student-brand flex items-center" style={{ marginRight: '32px' }}>
+            <div style={{background: 'var(--primary-gradient)', color: '#fff', borderRadius: '6px', padding: '4px 10px', fontWeight: 'bold', fontSize: '1.2rem'}}>SE</div>
           </Link>
           <div className="student-nav-links hidden md:flex">
             <Link 
